@@ -6,8 +6,8 @@ from llama_index.embeddings import OpenAIEmbedding
 
 # setup
 st.set_page_config(
-    page_title="this is the browser tab title", 
-    page_icon="😎", 
+    page_title="Chat with your docs", 
+    page_icon="💬", 
     layout="centered", 
     initial_sidebar_state="auto", 
     menu_items=None
@@ -15,8 +15,7 @@ st.set_page_config(
 st.header("Chat with the gibberjabber docs 🦝")
 st.info(body="page info blablah -  [this is a page link](https://www.google.com/)", icon="👹")
 
-# openai.api_key = st.secrets["OPENAI_API_KEY"]
-openai.api_key = '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'
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 llm = OpenAI(model='gpt-3.5-turbo', temperature=0.1)
 embed_model = OpenAIEmbedding(embed_batch_size=50)
 service_context = ServiceContext.from_defaults(llm=llm, embed_model=embed_model)
