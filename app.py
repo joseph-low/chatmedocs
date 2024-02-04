@@ -6,7 +6,7 @@ from llama_index.embeddings import OpenAIEmbedding
 
 # setup
 st.set_page_config(
-    page_title="Chat with your docs", 
+    page_title="Chat With Your Docs", 
     page_icon="💬", 
     layout="centered", 
     initial_sidebar_state="auto", 
