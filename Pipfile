@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+llama-index = "*"
+streamlit = "*"
+openai = "*"
+nltk = "*"
+pymupdf = "*"
+langchain = "*"
+unstructured = "*"
+pdf2image = "*"
+pdfminer = "*"
+camelot-py = "*"
+streamlit-float = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

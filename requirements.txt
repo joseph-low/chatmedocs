@@ -2,3 +2,5 @@ llama-index
 streamlit
 openai
 nltk
+pymupdf
+langchain
