@@ -15,7 +15,7 @@ from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.readers.file import PyMuPDFReader
 
 
-@st.cache_resource(show_spinner=False)
+@st.cache_resource(ttl=3600, show_spinner=False)
 def load_data():
     with st.spinner(text="Loading and indexing - hang tight!"):
         documents = PyMuPDFReader().load_data(file_path=temp_file_path)
@@ -71,8 +71,7 @@ def citation_snapshot(source_texts=list):
 
 
 
-
-# streamlit page configs
+# streamlit page config
 st.set_page_config(
     page_title="Chat With Your Docs", 
     page_icon=None, 
@@ -80,13 +79,22 @@ st.set_page_config(
     menu_items=None
 )
 st.header("💬 Chat With Your Docs")
+with st.sidebar:
+    uploaded_file = st.sidebar.file_uploader(
+                label="Upload pdf file",
+                accept_multiple_files=False,
+                type=['pdf'],
+                help="Only PDF files are supported"
+    )
 
-uploaded_file = st.sidebar.file_uploader(
-            label="Upload pdf file",
-            accept_multiple_files=False,
-            type=['pdf'],
-            help="Only PDF files are supported"
-)
+
+# env setup
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
+
+Settings.llm = OpenAI(model='gpt-3.5-turbo', temperature=0.1)
+Settings.embed_model = OpenAIEmbedding(embed_batch_size=50)
+
 
 # create temp file path for uploaded file
 if uploaded_file is not None:
@@ -97,11 +105,13 @@ if uploaded_file is not None:
     # st.success("File saved to temporary location: {}".format(temp_file_path))
 
 
-# env setup
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-Settings.llm = OpenAI(model='gpt-3.5-turbo', temperature=0.1)
-Settings.embed_model = OpenAIEmbedding(embed_batch_size=50)
-
+# clear cache on new file upload
+if uploaded_file is None:
+    st.cache_resource.clear()
+    for messages in st.session_state.keys():
+        del st.session_state[messages]
+    for citations in st.session_state.keys():
+        del st.session_state[citations]
 
 
 
